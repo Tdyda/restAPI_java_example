@@ -1,5 +1,6 @@
-package com.example.restapi_java.controller;
+package com.example.restapi_java.controller.auth;
 
+import com.example.restapi_java.controller.BaseController;
 import com.example.restapi_java.dto.auth.AuthCredentials;
 import com.example.restapi_java.dto.auth.AuthResponse;
 import com.example.restapi_java.dto.auth.SignUp;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-public class UserController extends BaseController {
+public class AuthController extends BaseController {
     private final UserService userService;
 
     @PostMapping("/sign-up")

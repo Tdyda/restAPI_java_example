@@ -4,6 +4,7 @@ import com.example.restapi_java.dto.auth.AuthCredentials;
 import com.example.restapi_java.dto.auth.AuthResponse;
 import com.example.restapi_java.dto.auth.SignUp;
 import com.example.restapi_java.dto.roles.AssignRoleRequest;
+import com.example.restapi_java.dto.roles.RoleResponse;
 import com.example.restapi_java.exception.role.RoleNotFoundException;
 import com.example.restapi_java.exception.user.EmailAlreadyInUseException;
 import com.example.restapi_java.exception.user.InvalidCredentialsException;
@@ -18,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -75,5 +77,15 @@ public class UserService {
         user.getRoles().add(role);
 
         userRepository.save(user);
+    }
+
+    public void unassignRoleFromAllUsers(Role role) {
+        List<User> users = userRepository.findAllByRolesContaining(role);
+
+        for (User user : users) {
+            user.getRoles().remove(role);
+        }
+
+        userRepository.saveAll(users);
     }
 }

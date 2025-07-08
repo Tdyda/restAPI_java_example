@@ -1,5 +1,6 @@
-package com.example.restapi_java.controller;
+package com.example.restapi_java.controller.auth;
 
+import com.example.restapi_java.controller.BaseController;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
