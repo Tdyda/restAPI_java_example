@@ -7,13 +7,13 @@ import org.springframework.context.annotation.Configuration;
 public class DotenvConfig {
     public static void loadEnv() {
         Dotenv dotenv = Dotenv.configure()
-                .filename(".env.example")
+                .filename(".env")
                 .ignoreIfMalformed()
                 .ignoreIfMissing()
                 .load();
 
         Dotenv dotenvLocal = Dotenv.configure()
-                .filename(".env.example.local")
+                .filename(".env.local")
                 .ignoreIfMalformed()
                 .ignoreIfMissing()
                 .load();
