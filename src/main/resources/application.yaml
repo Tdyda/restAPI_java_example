@@ -1,0 +1,31 @@
+server:
+  port: 5001
+
+spring:
+  application:
+    name: restAPI_java
+  datasource:
+    url: ${DATABASE_URL}
+    username: restapi
+    password: restapi
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+logging:
+  level:
+    root: INFO
+    com.example.restapi_java: DEBUG
+  file:
+    name: logs/app.log
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+jwt:
+  secret: ${JWT_SECRET}

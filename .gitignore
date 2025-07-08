@@ -1,0 +1,52 @@
+# Maven / Gradle
+/target/
+/build/
+/.gradle/
+/out/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# VSCode
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+/logs
+
+# Spring Boot specific
+*.jar
+*.war
+
+# ---------------------------
+# Environment files
+# ---------------------------
+
+# Ignoruj wszystkie .env.*
+.env.*
+
+# ALE: pozwól dodać pliki .env.example
+!.env.example
+!docker/.env.example
+
+# Docker: ignoruj lokalny plik z hasłami
+/docker/.env
+
+# Aplikacyjny .env – NIE ignoruj (ładowany przez dotenv-java)
+/.env  # <- jawnie dodaj, jeśli chcesz go śledzić
+
+# ---------------------------
+# Misc
+# ---------------------------
+node_modules/

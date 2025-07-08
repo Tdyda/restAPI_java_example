@@ -1,0 +1,27 @@
+services:
+  mysql:
+    image: mysql:latest
+    container_name: restAPI_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  nginx:
+    build:
+      context: ../
+      dockerfile: Dockerfile
+    container_name: restAPI_nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - mysql
+
+volumes:
+  mysql_data:
