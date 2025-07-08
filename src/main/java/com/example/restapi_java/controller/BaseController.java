@@ -27,7 +27,7 @@ public abstract class BaseController {
         return ResponseEntity.status(201).body(body);
     }
 
-    protected <T> ResponseEntity<T> NOCONTENT(T body) {
-        return ResponseEntity.status(204).body(body);
+    protected ResponseEntity<Void> NOCONTENT() {
+        return ResponseEntity.status(204).build();
     }
 }

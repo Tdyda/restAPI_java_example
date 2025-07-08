@@ -1,11 +1,10 @@
-package com.example.restapi_java.controller;
+package com.example.restapi_java.controller.auth;
 
+import com.example.restapi_java.controller.BaseController;
 import com.example.restapi_java.dto.auth.AuthCredentials;
 import com.example.restapi_java.dto.auth.AuthResponse;
 import com.example.restapi_java.dto.auth.SignUp;
 import com.example.restapi_java.dto.roles.AssignRoleRequest;
-import com.example.restapi_java.dto.roles.RoleRequest;
-import com.example.restapi_java.model.Role;
 import com.example.restapi_java.model.User;
 import com.example.restapi_java.service.auth.UserService;
 import jakarta.validation.Valid;
@@ -20,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-public class UserController extends BaseController {
+public class AuthController extends BaseController {
     private final UserService userService;
 
     @PostMapping("/sign-up")

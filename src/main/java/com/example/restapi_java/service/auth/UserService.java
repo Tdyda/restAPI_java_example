@@ -4,6 +4,7 @@ import com.example.restapi_java.dto.auth.AuthCredentials;
 import com.example.restapi_java.dto.auth.AuthResponse;
 import com.example.restapi_java.dto.auth.SignUp;
 import com.example.restapi_java.dto.roles.AssignRoleRequest;
+import com.example.restapi_java.dto.roles.RoleResponse;
 import com.example.restapi_java.exception.role.RoleNotFoundException;
 import com.example.restapi_java.exception.user.EmailAlreadyInUseException;
 import com.example.restapi_java.exception.user.InvalidCredentialsException;
@@ -12,13 +13,13 @@ import com.example.restapi_java.model.Role;
 import com.example.restapi_java.model.User;
 import com.example.restapi_java.repository.RoleRepository;
 import com.example.restapi_java.repository.UserRepository;
-import com.example.restapi_java.service.role.RoleService;
 import com.example.restapi_java.service.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -70,11 +71,21 @@ public class UserService {
         Role role = roleRepository.findByName(request.getName())
                 .orElseThrow(() -> new RoleNotFoundException("Role not found"));
 
-        User user =  userRepository.findByEmail(request.getEmail())
+        User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UserNotFoundException(request.getEmail()));
 
         user.getRoles().add(role);
 
         userRepository.save(user);
+    }
+
+    public void unassignRoleFromAllUsers(Role role) {
+        List<User> users = userRepository.findAllByRolesContaining(role);
+
+        for (User user : users) {
+            user.getRoles().remove(role);
+        }
+
+        userRepository.saveAll(users);
     }
 }
