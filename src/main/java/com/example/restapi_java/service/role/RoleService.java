@@ -1,10 +1,9 @@
 package com.example.restapi_java.service.role;
 
-import com.example.restapi_java.dto.roles.AssignRoleRequest;
+import com.example.restapi_java.dto.roles.RoleRequest;
 import com.example.restapi_java.exception.role.RoleAlreadyExistsException;
 import com.example.restapi_java.model.Role;
 import com.example.restapi_java.repository.RoleRepository;
-import com.example.restapi_java.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,5 +27,14 @@ public class RoleService {
                     }
                 }
         );
+    }
+
+    public void createRole(RoleRequest request) {
+        if (roleRepository.findByName(request.getName()).isEmpty()) {
+            Role role = new Role();
+            role.setName(request.getName());
+        } else {
+            throw new RoleAlreadyExistsException(request.getName());
+        }
     }
 }

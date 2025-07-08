@@ -12,7 +12,6 @@ import com.example.restapi_java.model.Role;
 import com.example.restapi_java.model.User;
 import com.example.restapi_java.repository.RoleRepository;
 import com.example.restapi_java.repository.UserRepository;
-import com.example.restapi_java.service.role.RoleService;
 import com.example.restapi_java.service.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -70,7 +69,7 @@ public class UserService {
         Role role = roleRepository.findByName(request.getName())
                 .orElseThrow(() -> new RoleNotFoundException("Role not found"));
 
-        User user =  userRepository.findByEmail(request.getEmail())
+        User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UserNotFoundException(request.getEmail()));
 
         user.getRoles().add(role);
