@@ -4,6 +4,7 @@ import com.example.restapi_java.dto.auth.AuthCredentials;
 import com.example.restapi_java.dto.auth.AuthResponse;
 import com.example.restapi_java.dto.auth.SignUp;
 import com.example.restapi_java.dto.roles.AssignRoleRequest;
+import com.example.restapi_java.exception.role.RoleAlreadyAssignedException;
 import com.example.restapi_java.exception.role.RoleNotFoundException;
 import com.example.restapi_java.exception.user.EmailAlreadyInUseException;
 import com.example.restapi_java.exception.user.InvalidCredentialsException;
@@ -37,7 +38,7 @@ public class UserService {
         }
 
         Role userRole = roleRepository.findByName("ROLE_USER")
-                .orElseThrow(() -> new RuntimeException("Rola nie istnieje"));
+                .orElseThrow(() -> new RoleNotFoundException("ROLE_USER"));
 
         User user = new User();
         user.setUsername(request.getUsername());
@@ -72,6 +73,10 @@ public class UserService {
 
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UserNotFoundException(request.getEmail()));
+
+        if(user.getRoles().contains(role)) {
+            throw new RoleAlreadyAssignedException(String.valueOf(user.getId()));
+        }
 
         user.getRoles().add(role);
 
