@@ -27,15 +27,29 @@ services:
     volumes:
       - mysql_test_data:/var/lib/mysql
 
+  app:
+    build:
+      context: ..
+      dockerfile: docker/app/Dockerfile
+    container_name: restAPI_app
+    ports:
+      - "5001:5001"
+    environment:
+      DATABASE_URL: jdbc:mysql://restAPI_mysql:3306/${MYSQL_DATABASE}
+      JWT_SECRET: ${JWT_SECRET}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+    depends_on:
+      - mysql
+
   nginx:
     build:
-      context: ../
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./nginx/Dockerfile
     container_name: restAPI_nginx
     ports:
       - "80:80"
     depends_on:
-      - mysql
+      - app
 
 volumes:
   mysql_data:

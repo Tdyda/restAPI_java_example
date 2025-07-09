@@ -1,0 +1,21 @@
+# Ignore IDE config
+.idea/
+*.iml
+
+# Ignore Maven cache
+.mvn/
+
+# Ignore logs and out
+logs/
+out/
+
+# Ignore Git
+.git/
+.gitignore
+.gitattributes
+
+# Ignore env files (but keep templates if needed)
+.env.local
+
+# Ignore test reports
+surefire-reports/
