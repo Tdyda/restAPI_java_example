@@ -3,11 +3,10 @@ package com.example.restapi_java.service.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -17,17 +16,12 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
+@ActiveProfiles("test")
 public class JwtServiceTest {
 
+    @Autowired
     private JwtService jwtService;
-
-    @BeforeEach
-    void setUp() {
-        jwtService = new JwtService();
-        ReflectionTestUtils.setField(jwtService, "SECRET_KEY", "OMBhwobThAOSDnqKbksOKekHNyeHnrHWqJXcM5Bv/Rs=");
-        jwtService.init();
-    }
 
     @Test
     void shouldGenerateValidToken_withSubjectAndRoles() {
@@ -37,8 +31,7 @@ public class JwtServiceTest {
         String token = jwtService.generateToken(subject, roles);
 
         Claims claims = Jwts.parserBuilder()
-                .setSigningKey(Keys.hmacShaKeyFor(
-                        "OMBhwobThAOSDnqKbksOKekHNyeHnrHWqJXcM5Bv/Rs=".getBytes()))
+                .setSigningKey(jwtService.getKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
@@ -91,9 +84,7 @@ public class JwtServiceTest {
                 .claim("roles", roles)
                 .setIssuedAt(new Date(System.currentTimeMillis() - 2 * 60 * 60 * 1000))
                 .setExpiration(new Date(System.currentTimeMillis() - 60 * 60 * 1000))
-                .signWith(Keys.hmacShaKeyFor(
-                        "OMBhwobThAOSDnqKbksOKekHNyeHnrHWqJXcM5Bv/Rs=".getBytes()
-                ))
+                .signWith(jwtService.getKey())
                 .compact();
 
         Boolean isValid = jwtService.isTokenValid(expiredToken);

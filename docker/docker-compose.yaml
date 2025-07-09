@@ -13,6 +13,20 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
 
+  mysql_test:
+    image: mysql:latest
+    container_name: restAPI_mysql_test
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: test_root
+      MYSQL_DATABASE: test_db
+      MYSQL_USER: test_user
+      MYSQL_PASSWORD: test_pass
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql_test_data:/var/lib/mysql
+
   nginx:
     build:
       context: ../
@@ -25,3 +39,4 @@ services:
 
 volumes:
   mysql_data:
+  mysql_test_data:

@@ -6,16 +6,19 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@Getter
 public class JwtService {
     private static final long EXPIRATION_TIME = 1000 * 60 * 60; // 1h
     @Value("${jwt.secret}")
