@@ -10,6 +10,8 @@ import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Collection;
 import java.util.Date;
@@ -22,39 +24,38 @@ public class JwtService {
     private static final long EXPIRATION_TIME = 1000 * 60 * 60; // 1h
     @Value("${jwt.secret}")
     private String SECRET_KEY;
-    private Key key;
+    private SecretKey key;
 
     @PostConstruct
     public void init() {
-        this.key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
-        System.out.println("SECRET_KEY: " + SECRET_KEY);
+        this.key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
     }
 
     public String generateToken(String subject, Set<String> roles) {
         return Jwts.builder()
-                .setSubject(subject)
+                .subject(subject)
                 .claim("roles", roles)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(key, SignatureAlgorithm.HS256)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .signWith(key)
                 .compact();
     }
 
     public String extractSubject(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(key)
+        return Jwts.parser()
+                .verifyWith(key)
                 .build()
-                .parseClaimsJws(token)
-                .getBody()
+                .parseSignedClaims(token)
+                .getPayload()
                 .getSubject();
     }
 
     public Set<String> extractRoles(String token) {
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(key)
+        Claims claims = Jwts.parser()
+                .verifyWith(key)
                 .build()
-                .parseClaimsJws(token)
-                .getBody();
+                .parseSignedClaims(token)
+                .getPayload();
 
         Collection<?> rawRoles = (Collection<?>) claims.get("roles");
 
@@ -65,11 +66,11 @@ public class JwtService {
 
     public boolean isTokenValid(String token) {
         try {
-            Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(key)
+            Claims claims = Jwts.parser()
+                    .verifyWith(key)
                     .build()
-                    .parseClaimsJws(token)
-                    .getBody();
+                    .parseSignedClaims(token)
+                    .getPayload();
 
             return !claims.getExpiration().before(new Date());
         } catch (JwtException | IllegalArgumentException e) {
