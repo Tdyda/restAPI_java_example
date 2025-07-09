@@ -30,11 +30,11 @@ public class JwtServiceTest {
 
         String token = jwtService.generateToken(subject, roles);
 
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(jwtService.getKey())
+        Claims claims = Jwts.parser()
+                .verifyWith(jwtService.getKey())
                 .build()
-                .parseClaimsJws(token)
-                .getBody();
+                .parseSignedClaims(token)
+                .getPayload();
 
         assertEquals(subject, claims.getSubject());
         assertEquals(roles, new HashSet<>((List<?>) claims.get("roles")));
@@ -80,10 +80,10 @@ public class JwtServiceTest {
         Set<String> roles = Set.of("ROLE_USER", "ROLE_ADMIN");
 
         String expiredToken = Jwts.builder()
-                .setSubject(subject)
+                .subject(subject)
                 .claim("roles", roles)
-                .setIssuedAt(new Date(System.currentTimeMillis() - 2 * 60 * 60 * 1000))
-                .setExpiration(new Date(System.currentTimeMillis() - 60 * 60 * 1000))
+                .issuedAt(new Date(System.currentTimeMillis() - 2 * 60 * 60 * 1000))
+                .expiration(new Date(System.currentTimeMillis() - 60 * 60 * 1000))
                 .signWith(jwtService.getKey())
                 .compact();
 
@@ -98,10 +98,10 @@ public class JwtServiceTest {
         Set<String> roles = Set.of("ROLE_USER", "ROLE_ADMIN");
 
         String invalidToken = Jwts.builder()
-                .setSubject(subject)
+                .subject(subject)
                 .claim("roles", roles)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 60 * 60 * 1000))
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + 60 * 60 * 1000))
                 .signWith(Keys.hmacShaKeyFor(
                         "INVALID_SECRET_MIN_256_BITS_REQUIRED".getBytes()
                 ))
