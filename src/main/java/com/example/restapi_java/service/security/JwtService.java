@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -55,15 +54,11 @@ public class JwtService {
                 .parseClaimsJws(token)
                 .getBody();
 
-        Object raw = claims.get("roles");
+        Collection<?> rawRoles = (Collection<?>) claims.get("roles");
 
-        if (raw instanceof Collection<?> rolesCollection) {
-            return rolesCollection.stream()
-                    .filter(Objects::nonNull)
-                    .map(Object::toString)
-                    .collect(Collectors.toSet());
-        }
-        return Set.of();
+        return rawRoles.stream()
+                .map(Object::toString)
+                .collect(Collectors.toSet());
     }
 
     public boolean isTokenValid(String token) {
