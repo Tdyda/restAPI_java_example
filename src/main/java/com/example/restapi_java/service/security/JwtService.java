@@ -6,17 +6,18 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@Getter
 public class JwtService {
     private static final long EXPIRATION_TIME = 1000 * 60 * 60; // 1h
     @Value("${jwt.secret}")
@@ -55,15 +56,11 @@ public class JwtService {
                 .parseClaimsJws(token)
                 .getBody();
 
-        Object raw = claims.get("roles");
+        Collection<?> rawRoles = (Collection<?>) claims.get("roles");
 
-        if (raw instanceof Collection<?> rolesCollection) {
-            return rolesCollection.stream()
-                    .filter(Objects::nonNull)
-                    .map(Object::toString)
-                    .collect(Collectors.toSet());
-        }
-        return Set.of();
+        return rawRoles.stream()
+                .map(Object::toString)
+                .collect(Collectors.toSet());
     }
 
     public boolean isTokenValid(String token) {

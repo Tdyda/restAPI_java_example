@@ -4,7 +4,6 @@ import com.example.restapi_java.dto.auth.AuthCredentials;
 import com.example.restapi_java.dto.auth.AuthResponse;
 import com.example.restapi_java.dto.auth.SignUp;
 import com.example.restapi_java.dto.roles.AssignRoleRequest;
-import com.example.restapi_java.dto.roles.RoleResponse;
 import com.example.restapi_java.exception.role.RoleNotFoundException;
 import com.example.restapi_java.exception.user.EmailAlreadyInUseException;
 import com.example.restapi_java.exception.user.InvalidCredentialsException;

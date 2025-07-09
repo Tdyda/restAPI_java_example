@@ -11,14 +11,6 @@ import org.springframework.test.context.DynamicPropertySource;
 @SpringBootTest
 class RestApiJavaApplicationTests {
 
-    @DynamicPropertySource
-    static void loadDotenv(DynamicPropertyRegistry registry) {
-        Dotenv dotenv = Dotenv.configure().filename(".env.local").load();
-        dotenv.entries().forEach(entry -> {
-            registry.add(entry.getKey(), entry::getValue);
-        });
-    }
-
     @Test
     void contextLoads() {
     }

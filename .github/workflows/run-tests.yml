@@ -1,0 +1,48 @@
+name: Run Tests
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_DATABASE: test_db
+          MYSQL_USER: test_user
+          MYSQL_PASSWORD: test_pass
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Wait for MySQL
+        run: |
+          for i in {1..10}; do
+            nc -z localhost 3306 && echo "MySQL is up!" && break
+            echo "Waiting for MySQL..."
+            sleep 5
+          done
+
+      - name: Run tests
+        run: ./mvnw test -Dspring.profiles.active=test -Djwt.secret=${{ secrets.JWT_SECRET_TEST }}
+        env:
+          DB_URL: jdbc:mysql://localhost:3306/test_db
+          DB_USER: test_user
+          DB_PASS: test_pass
+
