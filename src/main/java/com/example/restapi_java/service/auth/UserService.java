@@ -74,7 +74,7 @@ public class UserService {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UserNotFoundException(request.getEmail()));
 
-        if(user.getRoles().contains(role)) {
+        if (user.getRoles().contains(role)) {
             throw new RoleAlreadyAssignedException(String.valueOf(user.getId()));
         }
 
