@@ -1,4 +1,4 @@
-package com.example.restapi_java.model.index_file.raw_material;
+package com.example.restapi_java.model.index_file.raw_material.raw_material_color;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,16 +7,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "countries")
-@Getter
-@Setter
+@Table(name = "colors")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Country {
+@Getter
+@Setter
+public class Color {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "country_id")
-    private int countryId;
+    @Column(name = "color_id")
+    private int kindId;
 
     @Column(name = "name")
     private String name;

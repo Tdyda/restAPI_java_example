@@ -1,7 +1,13 @@
-package com.example.restapi_java.model.index_file.raw_material;
-import com.example.restapi_java.model.index_file.raw_material.composite_keys.RawMaterialId;
+package com.example.restapi_java.model.index_file.raw_material.raw_material;
+import com.example.restapi_java.model.index_file.raw_material.Index;
+import com.example.restapi_java.model.index_file.raw_material.processing.Processing;
+import com.example.restapi_java.model.index_file.raw_material.raw_material_allergen.RawMaterialAllergen;
+import com.example.restapi_java.model.index_file.raw_material.raw_material_country.RawMaterialCountryOfOrigin;
+import com.example.restapi_java.model.index_file.raw_material.RawMaterialType;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "raw_materials")
@@ -35,9 +41,11 @@ public class RawMaterial {
     @JoinColumn(name = "processing_id", referencedColumnName = "processing_id")
     private Processing processing;
 
-    @ManyToOne
-    @JoinColumn(name ="country_of_origin_id", referencedColumnName = "country_id")
-    private Country countryOfOrigin;
+    @OneToMany(mappedBy = "rawMaterial")
+    private List<RawMaterialCountryOfOrigin> countryOfOrigins;
+
+    @OneToMany(mappedBy = "rawMaterial")
+    private List<RawMaterialAllergen> allergens;
 
     @Column(name = "storage")
     private String storage;

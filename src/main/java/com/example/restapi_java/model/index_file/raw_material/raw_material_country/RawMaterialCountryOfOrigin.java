@@ -1,6 +1,6 @@
-package com.example.restapi_java.model.index_file.raw_material;
+package com.example.restapi_java.model.index_file.raw_material.raw_material_country;
 
-import com.example.restapi_java.model.index_file.raw_material.composite_keys.RawMaterialAttachmentId;
+import com.example.restapi_java.model.index_file.raw_material.raw_material.RawMaterial;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Entity
 @Table(name ="raw_material_country_of_origins")
-@IdClass(RawMaterialCountryOfOrigin.class)
+@IdClass(RawMaterialCountryId.class)
 @Getter
 @Setter
 @NoArgsConstructor

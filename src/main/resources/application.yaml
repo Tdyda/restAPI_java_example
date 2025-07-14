@@ -6,8 +6,8 @@ spring:
     name: restAPI_java
   datasource:
     url: ${DATABASE_URL}
-    username: restapi
-    password: restapi
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:

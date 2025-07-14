@@ -1,4 +1,4 @@
-package com.example.restapi_java.model.index_file.raw_material;
+package com.example.restapi_java.model.index_file.raw_material.processing;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

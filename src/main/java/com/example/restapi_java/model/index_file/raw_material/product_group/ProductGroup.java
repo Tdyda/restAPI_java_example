@@ -1,5 +1,6 @@
-package com.example.restapi_java.model.index_file.raw_material;
+package com.example.restapi_java.model.index_file.raw_material.product_group;
 
+import com.example.restapi_java.model.index_file.raw_material.Index;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

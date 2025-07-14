@@ -1,6 +1,6 @@
-package com.example.restapi_java.model.index_file.raw_material;
+package com.example.restapi_java.model.index_file.raw_material.raw_material_allergen;
 
-import com.example.restapi_java.model.index_file.raw_material.composite_keys.RawMaterialAttachmentId;
+import com.example.restapi_java.model.index_file.raw_material.raw_material.RawMaterial;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,13 +8,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name ="raw_material_attachments")
-@IdClass(RawMaterialAttachmentId.class)
+@Table(name ="raw_material_allergenes")
+@IdClass(RawMaterialAllergenId.class)
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RawMaterialAttachment {
+public class RawMaterialAllergen {
     @Id
     @Column(name = "index_id")
     private String indexId;
@@ -24,14 +24,8 @@ public class RawMaterialAttachment {
     private String supplier;
 
     @Id
-    @Column(name = "attachment_type_id")
-    private int attachmentTypeId;
-
-    @Column(name = "path")
-    private String path;
-
-    @Column(name = "status")
-    private String status;
+    @Column(name = "allergen_id")
+    private int allergenId;
 
     @ManyToOne
     @JoinColumns({
@@ -41,6 +35,6 @@ public class RawMaterialAttachment {
     private RawMaterial rawMaterial;
 
     @ManyToOne
-    @JoinColumn(name = "attachment_type_id", referencedColumnName = "attachment_type_id", insertable = false, updatable = false)
-    private AttachmentType attachmentType;
+    @JoinColumn(name = "allergen_id", referencedColumnName = "allergen_id")
+    private Allergen allergen;
 }

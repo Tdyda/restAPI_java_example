@@ -1,4 +1,4 @@
-package com.example.restapi_java.model.index_file.raw_material.composite_keys;
+package com.example.restapi_java.model.index_file.raw_material.raw_material_attachment;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
