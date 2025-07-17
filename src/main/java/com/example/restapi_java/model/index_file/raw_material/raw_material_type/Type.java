@@ -1,4 +1,4 @@
-package com.example.restapi_java.model.index_file.raw_material;
+package com.example.restapi_java.model.index_file.raw_material.raw_material_type;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,17 +7,18 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "attachment_types")
-@Getter
-@Setter
+@Table(name = "types")
 @NoArgsConstructor
 @AllArgsConstructor
-public class AttachmentType {
+@Getter
+@Setter
+public class Type {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "attachment_type_id")
-    private int attachmentTypeId;
+    @Column(name = "type_id")
+    private int typeId;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
     private String name;
 }

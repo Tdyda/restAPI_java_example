@@ -1,8 +1,7 @@
 package com.example.restapi_java.service.auth;
 
-import com.example.restapi_java.dto.auth.AuthCredentials;
-import com.example.restapi_java.dto.auth.AuthResponse;
-import com.example.restapi_java.dto.auth.SignUp;
+import com.example.restapi_java.dto.auth.*;
+import com.example.restapi_java.dto.events.UserNotificationEvent;
 import com.example.restapi_java.dto.roles.AssignRoleRequest;
 import com.example.restapi_java.exception.role.RoleAlreadyAssignedException;
 import com.example.restapi_java.exception.role.RoleNotFoundException;
@@ -11,6 +10,7 @@ import com.example.restapi_java.exception.user.InvalidCredentialsException;
 import com.example.restapi_java.exception.user.UserNotFoundException;
 import com.example.restapi_java.model.Role;
 import com.example.restapi_java.model.User;
+import com.example.restapi_java.publisher.UserNotificationEventPublisher;
 import com.example.restapi_java.repository.RoleRepository;
 import com.example.restapi_java.repository.UserRepository;
 import com.example.restapi_java.service.security.JwtService;
@@ -19,8 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,6 +30,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final RoleRepository roleRepository;
+    private final UserNotificationEventPublisher userNotificationEventPublisher;
 
     public User createUser(SignUp request) {
         if (userRepository.existsByEmail(request.getEmail())) {
@@ -45,6 +45,13 @@ public class UserService {
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRoles(Set.of(userRole));
+
+        String verificationToken = UUID.randomUUID().toString();
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("verificationToken", verificationToken);
+
+        UserNotificationEvent event = new UserNotificationEvent(user.getEmail(), "SIGN-UP", payload);
+        userNotificationEventPublisher.publish(event);
 
         return userRepository.save(user);
     }
@@ -79,8 +86,14 @@ public class UserService {
         }
 
         user.getRoles().add(role);
-
         userRepository.save(user);
+
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("id", user.getId());
+        payload.put("roleName", role.getName());
+
+        UserNotificationEvent event =  new UserNotificationEvent(user.getEmail(), "ROLE-ASSIGNMENT", payload);
+        userNotificationEventPublisher.publish(event);
     }
 
     public void unassignRoleFromAllUsers(Role role) {

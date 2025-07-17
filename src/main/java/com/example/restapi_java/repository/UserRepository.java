@@ -1,5 +1,6 @@
 package com.example.restapi_java.repository;
 
+import com.example.restapi_java.dto.UserDTO;
 import com.example.restapi_java.model.Role;
 import com.example.restapi_java.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
